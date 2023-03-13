@@ -6,9 +6,11 @@ class WordCard extends StatefulWidget {
   const WordCard({
     super.key,
     this.dto,
+    this.onSave,
   });
 
   final WordDto? dto;
+  final Function? onSave;
 
   @override
   State<WordCard> createState() => _WordCardState();
@@ -26,6 +28,9 @@ class _WordCardState extends State<WordCard> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    var colors = theme.colorScheme;
+
     if (widget.dto != null) {
       if (widget.dto != null) {
         if (widget.dto!.definitions.isNotEmpty) {
@@ -44,6 +49,8 @@ class _WordCardState extends State<WordCard> {
       }
 
       return Card(
+        elevation: 10,
+        color: colors.surface,
         child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -54,12 +61,12 @@ class _WordCardState extends State<WordCard> {
                     widget.dto!.name,
                     style: const TextStyle(fontSize: 30),
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 2),
                   Text(
                     widget.dto!.type,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
-                      color: Colors.grey,
+                      color: colors.onSurface.withOpacity(0.6),
                     ),
                   ),
                 ],
@@ -73,7 +80,7 @@ class _WordCardState extends State<WordCard> {
                         child: Text(
                           ru,
                           style: TextStyle(
-                            color: Colors.black.withOpacity(0.5),
+                            color: colors.onSurface.withOpacity(0.6),
                           ),
                           textAlign: TextAlign.start,
                         ),
@@ -86,6 +93,21 @@ class _WordCardState extends State<WordCard> {
                       Flexible(child: Text(definition)),
                     ],
                   ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          widget.onSave?.call();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4.0),
+                          child: const Text('Учить'),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dictionary/components/template/center_scroll.dart';
 import 'package:dictionary/models/dto/word_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +17,6 @@ class DictionaryScreen extends StatefulWidget {
 
 class _DictionaryScreenState extends State<DictionaryScreen> {
   WordDto? wordDto;
-  PageController _controller = PageController(keepPage: true);
 
   onSubmit(String word) async {
     try {
@@ -38,22 +38,14 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
       appBar: AppBar(
         title: const Text('Словарь'),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: PageView(
-          scrollDirection: Axis.vertical,
-          controller: _controller,
-          pageSnapping: true,
+      body: CenterScroll(
+        child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(20.0),
               constraints: const BoxConstraints(minWidth: 300, maxWidth: 500),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // const Image(
-                  //   image: AssetImage('assets/images/todo-man.png'),
-                  // ),
                   SearchWord(onSubmit: onSubmit),
                   const SizedBox(height: 20),
                   WordCard(dto: wordDto)
