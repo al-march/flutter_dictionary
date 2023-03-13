@@ -31,15 +31,31 @@ class _SearchWordState extends State<SearchWord> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 50,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: IconButton(
+                onPressed: submit,
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.search),
+              ),
+            ),
+          ),
+          const SizedBox(width: 5),
           Expanded(
             flex: 1,
             child: SizedBox(
-              height: 80,
               child: TextFormField(
                 controller: input,
                 onEditingComplete: submit,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
                   hintText: 'Введите слово',
                   helperText: ' ',
                 ),
@@ -52,24 +68,6 @@ class _SearchWordState extends State<SearchWord> {
               ),
             ),
           ),
-          const SizedBox(width: 5),
-          SizedBox(
-            height: 55,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: ElevatedButton(
-                onPressed: submit,
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                child: const Icon(Icons.add),
-              ),
-            ),
-          )
         ],
       ),
     );
