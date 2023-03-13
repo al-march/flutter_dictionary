@@ -18,8 +18,10 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Todo',
         theme: ThemeData(
           useMaterial3: true,
-          primaryColor: Colors.teal,
-          scaffoldBackgroundColor: const Color(0xFFEDEDED),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.teal,
+            background: const Color(0xFFEDEDED),
+          ),
         ),
         home: const StartScreen(),
       ),
@@ -27,6 +29,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AppState extends ChangeNotifier {
-  
-}
+class AppState extends ChangeNotifier {}
