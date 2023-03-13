@@ -15,12 +15,12 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: MaterialApp(
-        title: 'Flutter Todo',
-        theme: ThemeData(
+        theme: ThemeData.from(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.teal,
-            background: const Color(0xFFEDEDED),
+          colorScheme: const ColorScheme.dark().copyWith(
+            background: const Color.fromARGB(255, 25, 25, 25),
+            primary: Colors.teal,
+            surface: const Color.fromARGB(255, 40, 40, 40),
           ),
         ),
         home: const StartScreen(),
