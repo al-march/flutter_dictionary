@@ -1,5 +1,8 @@
 import 'package:dictionary/screens/dictionary_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../components/template/center_scroll.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -10,12 +13,11 @@ class StartScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Welcome!'),
       ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(15.0),
-          constraints: const BoxConstraints(minWidth: 300, maxWidth: 500),
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        child: CenterScroll(
+          padding: const EdgeInsets.all(25.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Image(image: AssetImage('assets/images/sofa-man.png')),
               const Text(
@@ -43,7 +45,7 @@ class StartScreen extends StatelessWidget {
                 onPressed: () => {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                         builder: (context) => const DictionaryScreen(),
                       ))
                 },
