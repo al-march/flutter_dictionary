@@ -10,7 +10,7 @@ class WordCard extends StatefulWidget {
   });
 
   final WordDto? dto;
-  final Function? onSave;
+  final Function(WordDto word)? onSave;
 
   @override
   State<WordCard> createState() => _WordCardState();
@@ -19,7 +19,6 @@ class WordCard extends StatefulWidget {
 class _WordCardState extends State<WordCard> {
   String definition = '';
   String ru = '';
-  List<DefenitionPanel> panels = [];
 
   @override
   void initState() {
@@ -36,8 +35,7 @@ class _WordCardState extends State<WordCard> {
         if (widget.dto!.definitions.isNotEmpty) {
           var definitions = widget.dto!.definitions;
           setState(() {
-            definition = definitions.removeAt(0).meaning;
-            panels = generateList(definitions);
+            definition = definitions[0].meaning;
           });
         }
 
@@ -99,7 +97,7 @@ class _WordCardState extends State<WordCard> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          widget.onSave?.call();
+                          widget.onSave?.call(widget.dto!);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(4.0),
@@ -117,63 +115,5 @@ class _WordCardState extends State<WordCard> {
     } else {
       return const SizedBox();
     }
-  }
-}
-
-class DefenitionPanel {
-  bool isExpanded = false;
-  DefinitionDto dto;
-
-  DefenitionPanel({
-    required this.dto,
-  });
-}
-
-generateList(List<DefinitionDto> list) {
-  return list.map((dto) => DefenitionPanel(dto: dto)).toList();
-}
-
-class WordCardDefsList extends StatefulWidget {
-  final List<DefenitionPanel> panels;
-
-  const WordCardDefsList({
-    super.key,
-    required this.panels,
-  });
-
-  @override
-  State<WordCardDefsList> createState() => _WordCardDefsListState();
-}
-
-class _WordCardDefsListState extends State<WordCardDefsList> {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ExpansionPanelList(
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            widget.panels[index].isExpanded = !isExpanded;
-          });
-        },
-        children: widget.panels.map((def) {
-          return ExpansionPanel(
-            headerBuilder: (context, isExpand) {
-              return ListTile(
-                title: SizedBox(
-                  child: Text(
-                    def.dto.meaning,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              );
-            },
-            body: ListTile(
-              subtitle: Text(def.dto.meaning),
-            ),
-            isExpanded: def.isExpanded,
-          );
-        }).toList(),
-      ),
-    );
   }
 }
