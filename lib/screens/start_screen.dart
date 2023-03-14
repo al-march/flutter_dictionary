@@ -2,7 +2,7 @@ import 'package:dictionary/screens/dictionary_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../components/template/center_scroll.dart';
+import '../components/template/app_scroll.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -15,7 +15,8 @@ class StartScreen extends StatelessWidget {
       ),
       body: Container(
         constraints: const BoxConstraints.expand(),
-        child: CenterScroll(
+        child: AppScroll(
+          center: true,
           padding: const EdgeInsets.all(25.0),
           child: Column(
             children: [
