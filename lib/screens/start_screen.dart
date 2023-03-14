@@ -47,7 +47,7 @@ class StartScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (context) => const DictionaryScreen(),
+                        builder: (context) => DictionaryScreen(),
                       ))
                 },
                 child: const Padding(
