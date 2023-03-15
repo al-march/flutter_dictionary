@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dictionary/components/template/app_scroll.dart';
+import 'package:dictionary/models/dto/user_dto.dart';
 import 'package:dictionary/models/dto/word_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,12 +18,39 @@ class DictionaryScreen extends StatefulWidget {
 
 class _DictionaryScreenState extends State<DictionaryScreen> {
   var tabIndex = 0;
+  UserDto? user;
   List<WordDto> savedWords = [];
 
-  saveWord(WordDto word) {
-    setState(() {
-      savedWords.add(word);
-    });
+  @override
+  initState() {
+    super.initState();
+    fetchData();
+  }
+
+  fetchData() async {
+    try {
+      var userDto = await fetchUser();
+      var wordsDto = await fetchUserSavedWords();
+
+      setState(() {
+        user = userDto;
+        savedWords = wordsDto;
+      });
+    } catch (e) {
+      showSnackbar(context, "Не удалось загрузить данные");
+    }
+  }
+
+  saveWord(WordDto word) async {
+    try {
+      var saved = await fetchSaveWord(word.name);
+      setState(() {
+        savedWords.add(saved);
+        showSnackbar(context, 'Слово ${word.name} сохранено!');
+      });
+    } catch (e) {
+      showSnackbar(context, 'Не удалось сохранить слово "${word.name}" 😕');
+    }
   }
 
   @override
@@ -36,7 +64,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         tab = SavedWordsTab(words: savedWords);
         break;
       default:
-        tab = const Center(child: Text("page not found 😕"));
+        tab = const Center(child: Text('page not found 😕'));
     }
 
     return Navigation(
@@ -77,10 +105,7 @@ class _SearchTabState extends State<SearchTab> {
         wordDto = dto;
       });
     } catch (err) {
-      var snackBar = SnackBar(
-        content: Text('Не удалось загрузить определение "$word" 😕'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackbar(context, 'Не удалось загрузить определение "$word" 😕');
     }
   }
 
@@ -181,6 +206,34 @@ class Navigation extends StatelessWidget {
   }
 }
 
+Future<UserDto> fetchUser() async {
+  var url = 'http://127.0.0.1:8080/api/v1/user/root';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    var utf = utf8.decode(response.bodyBytes);
+    return UserDto.fromJson(jsonDecode(utf));
+  } else {
+    throw Exception('Failed to load word user');
+  }
+}
+
+Future<List<WordDto>> fetchUserSavedWords() async {
+  var url = 'http://127.0.0.1:8080/api/v1/user/root/saved';
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    var utf = utf8.decode(response.bodyBytes);
+    var json = jsonDecode(utf);
+
+    if (json != null) {
+      return (json as List).map((word) => WordDto.fromJson(word)).toList();
+    }
+    return List.empty();
+  } else {
+    throw Exception('Failed to load user words');
+  }
+}
+
 Future<WordDto> fetchWord(String name) async {
   var url = 'http://127.0.0.1:8080/api/v1/word/$name';
   final response = await http.get(Uri.parse(url));
@@ -191,4 +244,23 @@ Future<WordDto> fetchWord(String name) async {
   } else {
     throw Exception('Failed to load word: $name');
   }
+}
+
+Future<WordDto> fetchSaveWord(String name) async {
+  var url = 'http://127.0.0.1:8080/api/v1/word/$name';
+  final response = await http.post(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    var utf = utf8.decode(response.bodyBytes);
+    return WordDto.fromJson(jsonDecode(utf));
+  } else {
+    throw Exception('Failed to load word: $name');
+  }
+}
+
+showSnackbar(BuildContext context, String message) {
+  var snackBar = SnackBar(
+    content: Text(message),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
