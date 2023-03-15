@@ -117,3 +117,61 @@ class _WordCardState extends State<WordCard> {
     }
   }
 }
+
+class WordCardMini extends StatelessWidget {
+  const WordCardMini({super.key, required this.dto, this.onInfo});
+
+  final WordDto dto;
+  final Function? onInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    String translate = '';
+    if (dto.translation != null) {
+      if (dto.translation!.ru != null) {
+        translate = dto.translation!.ru!;
+      }
+    }
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(children: [
+                ListTile(
+                  title: Row(children: [
+                    Text(
+                      dto.name,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      dto.type,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                  ]),
+                  subtitle: Text(translate),
+                ),
+              ]),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              onPressed: () {
+                onInfo?.call();
+              },
+              icon: const Icon(Icons.info),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
