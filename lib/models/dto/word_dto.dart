@@ -14,8 +14,13 @@ class WordDto {
   });
 
   factory WordDto.fromJson(Map<String, dynamic> json) {
-    var defJson = json['definitions'] as List;
-    var defDtos = defJson.map((def) => DefinitionDto.fromJson(def)).toList();
+    List<DefinitionDto> defDtos = [];
+
+    var defJson = json['definitions'];
+    if (defJson != null) {
+      defDtos = (defJson as List).map((def) => DefinitionDto.fromJson(def)).toList();
+    }
+
     var translation = TranslationDto.fromJson(json['translate']);
 
     return WordDto(
