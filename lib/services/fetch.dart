@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 import '../models/dto/user_dto.dart';
 import '../models/dto/word_dto.dart';
 
+const HOST = 'https://api.compress.monster';
+
 Future<UserDto> fetchUser() async {
-  var url = 'http://127.0.0.1:8080/api/v1/user/root';
+  var url = '$HOST/api/v1/user/root';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -18,7 +20,7 @@ Future<UserDto> fetchUser() async {
 }
 
 Future<List<WordDto>> fetchUserSavedWords() async {
-  var url = 'http://127.0.0.1:8080/api/v1/user/root/saved/mini';
+  var url = '$HOST/api/v1/user/root/saved/mini';
   final response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
     var utf = utf8.decode(response.bodyBytes);
@@ -34,7 +36,7 @@ Future<List<WordDto>> fetchUserSavedWords() async {
 }
 
 Future<WordDto> fetchWord(String name) async {
-  var url = 'http://127.0.0.1:8080/api/v1/word/$name';
+  var url = '$HOST/api/v1/word/$name';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -46,7 +48,7 @@ Future<WordDto> fetchWord(String name) async {
 }
 
 Future<WordDto> fetchSaveWord(String name) async {
-  var url = 'http://127.0.0.1:8080/api/v1/word/$name';
+  var url = '$HOST/api/v1/word/$name';
   final response = await http.post(Uri.parse(url));
 
   if (response.statusCode == 200) {
